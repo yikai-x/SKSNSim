@@ -33,6 +33,8 @@ namespace SKSNSimTools {
       return SKSNSIMENUM::SKPERIOD::SKVI;
     else if( checkRange(rn, (int)SKSNSIMENUM::SKPERIODRUN::SKVIIBEGIN, (int)SKSNSIMENUM::SKPERIODRUN::SKVIIEND) )
       return SKSNSIMENUM::SKPERIOD::SKVII;
+    else if( checkRange(rn, (int)SKSNSIMENUM::SKPERIODRUN::SKVIIVBEGIN, (int)SKSNSIMENUM::SKPERIODRUN::SKVIIVEND) )
+      return SKSNSIMENUM::SKPERIOD::SKVIIV;
     else if( checkRange(rn, (int)SKSNSIMENUM::SKPERIODRUN::SKVIIIBEGIN, (int)SKSNSIMENUM::SKPERIODRUN::SKVIIIEND) )
       return SKSNSIMENUM::SKPERIOD::SKVIII;
 
@@ -54,9 +56,12 @@ namespace SKSNSimTools {
 
 namespace SKSNSimLiveTime {
   const static std::map<SKSNSIMENUM::SKPERIOD, std::string> FNAMEMAP = {
-    { SKSNSIMENUM::SKPERIOD::SKV, "/home/sklowe/realtime_sk5_rep/solar_oct19/livetime/livetime5.r080539.r082086.txt" },
+    { SKSNSIMENUM::SKPERIOD::SKIV, "/home/sklowe/realtime_sk4_rep/solar_apr20/livetime/livetime5.r061525.r077958.txt" },
+    { SKSNSIMENUM::SKPERIOD::SKV, "/home/sklowe/realtime_sk5_rep/solar_nov20/livetime/livetime5.r080539.r082915.txt" },
     { SKSNSIMENUM::SKPERIOD::SKVI, "/home/sklowe/realtime_sk6_rep/solar_oct22/livetime/livetime5.r085220.r087220.txt" },
-    { SKSNSIMENUM::SKPERIOD::SKVII, "/home/sklowe/realtime_sk7_rep/solar_nov23/livetime/livetime5.r080000.r091985.txt" }
+    { SKSNSIMENUM::SKPERIOD::SKVII, "/home/sklowe/realtime_sk7_rep/solar_nov23/livetime/livetime5.r080000.r091985.txt" },
+    { SKSNSIMENUM::SKPERIOD::SKVIIV, "/home/sklowe/realtime_sk7_coiloff/relic_feb26/livetime/livetime5.r093000.r093779.txt" },
+    { SKSNSIMENUM::SKPERIOD::SKVIII, "/home/sklowe/realtime_sk8/relic_apr26/livetime/livetime5.r095000.r097280.txt" }
   };
 
   std::vector<std::tuple<int,double>> LoadLiveTime(std::string fname){
@@ -107,6 +112,9 @@ namespace SKSNSimLiveTime {
     } else if( p == SKSNSIMENUM::SKPERIOD::SKVII ) {
       run_begin = (int)SKSNSIMENUM::SKPERIODRUN::SKVIIBEGIN;
       run_end = (int)SKSNSIMENUM::SKPERIODRUN::SKVIIEND;
+    } else if( p == SKSNSIMENUM::SKPERIOD::SKVIIV ) {
+      run_begin = (int)SKSNSIMENUM::SKPERIODRUN::SKVIIVBEGIN;
+      run_end = (int)SKSNSIMENUM::SKPERIODRUN::SKVIIVEND;
     } else if( p == SKSNSIMENUM::SKPERIOD::SKVIII ) {
       run_begin = (int)SKSNSIMENUM::SKPERIODRUN::SKVIIIBEGIN;
       run_end = (int)SKSNSIMENUM::SKPERIODRUN::SKVIIIEND;
