@@ -4,6 +4,7 @@
  ************************************/
 
 #include <vector>
+#include <cstdlib>
 #include <fstream>
 #include <string>
 #include <algorithm>
@@ -37,6 +38,10 @@ void SKSNSimDSNBFluxCustom::loadFile(const std::string fname, const std::string 
 {
   ene_flux_v->clear();
   std::ifstream datafile(fname.c_str());
+  if(!datafile.is_open()){
+    std::cerr << "DSNB flux file load failed: " << fname << std::endl;
+    exit(EXIT_FAILURE);
+  }
   double ene, flux;
   for(std::string line; std::getline(datafile, line); ){
     auto pos_delim = line.find(delim);
@@ -46,6 +51,10 @@ void SKSNSimDSNBFluxCustom::loadFile(const std::string fname, const std::string 
     ene_flux_v->push_back(std::make_pair(ene, flux));
   }
   datafile.close();
+  if(ene_flux_v->empty()){
+    std::cerr << "DSNB flux file contains no data: " << fname << std::endl;
+    exit(EXIT_FAILURE);
+  }
   sortByEnergy();
   return;
 }
@@ -73,8 +82,7 @@ double SKSNSimDSNBFluxCustom::GetFlux(const double nu_ene_MeV, const double time
   // Assumed the data field ene_flux_v is sorted as lowest energy on first 
   // Calculate flux with linear interpolation
   const static double ERROR_CODE = -9999.;
-  const static double OUTOFRANGE = -9998.;
-  if(ene_flux_v == NULL) return ERROR_CODE;
+  if(ene_flux_v == NULL || ene_flux_v->size() < 2) return ERROR_CODE;
   std::pair<double,double> bin = std::make_pair(-1, 0);
   std::pair<double,double> nextbin;
   for(std::vector<std::pair<double,double> >::iterator it = ene_flux_v->begin(); it+1 != ene_flux_v->end(); it++){
@@ -89,7 +97,7 @@ double SKSNSimDSNBFluxCustom::GetFlux(const double nu_ene_MeV, const double time
 #ifdef RETURNEXCEPATIONS
     throw  std::out_of_range("energy is out of range");
 #endif
-    return OUTOFRANGE;
+    return 0.0; // no flux outside the tabulated energy range
   }
 
   double nuFlux = (nextbin.second - bin.second) * (nu_ene_MeV - bin.first) / (nextbin.first - bin.first) + bin.second;

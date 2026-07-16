@@ -3,10 +3,14 @@
  **********************************/
 
 #include <set>
+#include <array>
 #include <cstdio>
+#include <cstdlib>
+#include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <TSystem.h>
 #include <TFile.h>
 #include <TFileCacheWrite.h>
 #include <TTree.h>
@@ -26,7 +30,14 @@ void SKSNSimFileOutTFile::Open(const std::string fname, const bool including_sne
     delete m_fileptr;
   }
 
+  const auto dirsep = fname.find_last_of('/');
+  if(dirsep != std::string::npos)
+    gSystem->mkdir(fname.substr(0, dirsep).c_str(), true /* recursive */);
   m_fileptr = new TFile(fname.c_str(), "RECREATE");
+  if(m_fileptr->IsZombie()){
+    std::cerr << "Failed to open output file: " << fname << std::endl;
+    exit(EXIT_FAILURE);
+  }
   std::cout << "Opened : " << fname << " (" << m_fileptr << ") "<< std::endl;
 	//------------------------------------------------------------------------
 	// set write cache to 40MB 

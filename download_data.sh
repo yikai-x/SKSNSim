@@ -21,6 +21,6 @@ which wget || (echo "no wget on your system. Please download manually from \"${U
 wget -O $target $UPSTREAMURL
 
 origdir=$(pwd)
-cd $SKSNSIMDATADIR && tar -xvzf $target
+cd $SKSNSIMDATADIR && tar -xvzf $target --strip-components=1
 cd $origdir
 
