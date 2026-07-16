@@ -393,12 +393,13 @@ SKSNSimVectorSNGenerator::SKSNSimVectorSNGenerator():
 
 std::vector<SKSNSimSNEventVector> SKSNSimVectorSNGenerator::GenerateEvents(){
   std::vector<SKSNSimSNEventVector> evt_buffer;
-  SKSNSimBinnedFluxModel &flux = dynamic_cast<SKSNSimBinnedFluxModel&>(*fluxmodels[0]); // TODO selectable flux
-  if(&flux == NULL) {
+  SKSNSimBinnedFluxModel *fluxptr = fluxmodels.empty()? NULL: dynamic_cast<SKSNSimBinnedFluxModel*>(fluxmodels[0].get()); // TODO selectable flux
+  if(fluxptr == NULL) {
     std::cerr << "In GenerateEvents() no appropriate flux model (binned flux)" << std::endl;
     evt_buffer.clear();
     return evt_buffer;
   }
+  SKSNSimBinnedFluxModel &flux = *fluxptr;
 
   SKSNSimXSecIBDSV       &xsecibd         = dynamic_cast<SKSNSimXSecIBDSV&>(      *xsecmodels[XSECTYPE::mXSECIBD]);
   SKSNSimXSecNuElastic   &xsecnuela       = dynamic_cast<SKSNSimXSecNuElastic&>(  *xsecmodels[XSECTYPE::mXSECELASTIC]);
