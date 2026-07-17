@@ -249,6 +249,7 @@ SKSNSimSNEventVector SKSNSimVectorGenerator::GenerateEventIBDFlat() {
   auto SQ = [](double a){ return a*a;};
 
   const double eEne = rng.Uniform( GetEnergyMin(), GetEnergyMax());
+  ev.AddNRandomThrow(1); // flat mode has no hit-and-miss rejection: every throw is accepted
   const double cost = rng.Uniform( -1., 1. );
   const double nuEne = SKSNSimCrosssection::CalcIBDEnuFromEpos( eEne, cost );
 

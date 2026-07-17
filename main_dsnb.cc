@@ -75,7 +75,13 @@ int main(int argc, char **argv){
   }
 
   /* Calculation of integrateion of dN/dE spectrum */
-  if( num_random_throw > 0 ){
+  if( config->GetDSNBFlatFlux() ){
+    std::cout << "=============================" << std::endl
+      << "Finished event generation in flat positron-energy mode: " << std::endl
+      << "(Total Events) / (Total Random Throw) = " << num_total_event << " / " << num_random_throw << " (every throw is accepted: no hit-and-miss rejection)" << std::endl
+      << "The dN/dE spectrum integration summary is not applicable in flat-flux mode." << std::endl
+      << "============================="   << std::endl;
+  } else if( num_random_throw > 0 ){
   std::cout << "=============================" << std::endl
     <<  "Finished event generation: integration results: " << std::endl
     << "(Total Events) / (Total Random Throw)  = " << num_total_event << " / " << num_random_throw << " = " << (double)num_total_event/(double)num_random_throw << std::endl
@@ -83,8 +89,8 @@ int main(int argc, char **argv){
     << "(Integration of dN/dE spectrum (flux x xsec)) / ( total number of free-proton ) = " << max_weight * (double) num_total_event / (double)num_random_throw << std::endl
     << "============================="   << std::endl;
   } else {
-    std::cout <<  "Finished event generation: total number of random throw is zero or negative ( " << num_random_throw << " )" << std::endl
-      << "Ignore this message if you do NOT use flat-flux mode." << std::endl;
+    std::cout <<  "WARNING: finished event generation with zero random throws ( events: " << num_total_event << " )." << std::endl
+      << "This is unexpected in spectrum (non-flat-flux) mode: no events were sampled. Check the number of requested events and the flux/xsec configuration." << std::endl;
   }
 
   return EXIT_SUCCESS;
